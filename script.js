@@ -213,7 +213,6 @@ function setNewQuestion(question) {
   answers.push(question.correct_answer);
   shuffleAnswers(answers);
   correctAnswer = answers.indexOf(question.correct_answer);
-  console.log(correctAnswer + 1);
   questionHeader.textContent = 'Question #' + (turn + 1);
   questionTxt.textContent = htmlDecode(question.question);
   setAnswers(answers);
