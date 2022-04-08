@@ -55,6 +55,15 @@ let correctAnswer;
 let timeOut;
 let multiplier;
 
+const colors = {
+  win: 'linear-gradient(to top left, #04631c 0%, #022c0b 100%)',
+  defeat: 'linear-gradient(to top left, #7e0202 0%, #2c0202 100%)',
+  green: '#17d61099',
+  red: '#d6101099',
+  white: '#ddd',
+  grey: '#ffffff99',
+};
+
 // Holds timer when timer button is clicked
 function holdTimer() {
   clearTimeout(timeOut);
@@ -81,19 +90,17 @@ function cutAnswers() {
 }
 
 // Executes if game is finished
-// Styles modal and layout with celebration if escaped or with red screen if caught
+// Styles modal and layout with win if escaped or with red screen if caught
 function finishGame() {
   if (score > 250) {
     confetti.classList.remove('hidden');
-    modalHeader.textContent = 'YOU DEFEATED THE CHASER! 🎉';
-    modal.style.backgroundImage =
-      'linear-gradient(to top left, #04631c 0%, #022c0b 100%)';
+    modalHeader.textContent = 'YOU ESCAPED FROM THE CHASER! 🎉';
+    modal.style.backgroundImage = colors.win;
     herman.src = 'sad.jpg';
   } else {
     confetti.classList.add('hidden');
     modalHeader.textContent = 'YOU WERE CAUGHT BY THE CHASER ☠';
-    modal.style.backgroundImage =
-      'linear-gradient(to top left, #7e0202 0%, #2c0202 100%)';
+    modal.style.backgroundImage = colors.defeat;
     herman.src = 'happy.jpg';
   }
   resetGame();
@@ -106,14 +113,14 @@ function answerClick(evt) {
   finishQuestion();
   const answerNum = evt.currentTarget.id.slice(-1);
   if (answerNum == correctAnswer) {
-    buttons[answerNum].style.background = '#17d61099';
+    buttons[answerNum].style.background = colors.green;
     const add = Math.ceil(Number(timer.textContent) * multiplier);
     score += add;
     scoreTxt.textContent = `+${add}`;
     scoreTxt.style.color = 'rgba(255, 0, 0, 0.4)';
     startTimer(2, 'score');
   } else {
-    buttons[correctAnswer].style.background = '#d6101099';
+    buttons[correctAnswer].style.background = colors.red;
   }
 }
 
@@ -129,7 +136,7 @@ function finishQuestion() {
 
 // Displays score in score box
 function showScore() {
-  scoreTxt.style.color = '#ddd';
+  scoreTxt.style.color = colors.white;
   scoreTxt.textContent = score;
 }
 
@@ -141,7 +148,7 @@ function startTimer(x, box) {
   if (x === 0) {
     if (box === 'timer') {
       finishQuestion();
-      buttons[correctAnswer].style.background = '#d6101099';
+      buttons[correctAnswer].style.background = colors.red;
     } else {
       showScore();
     }
@@ -196,9 +203,9 @@ function shuffleAnswers(array) {
 }
 
 // All settings for new question begin from here
-function setNewQuestion(question, turn) {
+function setNewQuestion(question) {
   for (let i = 0; i < 4; i++) {
-    buttons[i].style.background = '#ffffff99';
+    buttons[i].style.background = colors.grey;
     buttons[i].disabled = false;
     buttons[i].style.display = 'block';
   }
@@ -206,7 +213,8 @@ function setNewQuestion(question, turn) {
   answers.push(question.correct_answer);
   shuffleAnswers(answers);
   correctAnswer = answers.indexOf(question.correct_answer);
-  questionHeader.textContent = 'Question #' + turn;
+  console.log(correctAnswer + 1);
+  questionHeader.textContent = 'Question #' + (turn + 1);
   questionTxt.textContent = htmlDecode(question.question);
   setAnswers(answers);
   if (question.difficulty === 'easy') {
@@ -225,7 +233,7 @@ function nextTurn() {
   if (turn === 19) {
     nextBtn.textContent = 'finish game';
   }
-  setNewQuestion(questions[turn], turn + 1);
+  setNewQuestion(questions[turn]);
   showScore();
   clearTimeout(timeOut);
   startTimer(30, 'timer');
@@ -247,7 +255,7 @@ function enableBtns() {
 
 // Loads data from opentdb
 function loadQuestions() {
-  const myRequest = new Request('https://opentdb.com/api.php?amount=100');
+  const myRequest = new Request('https://opentdb.com/api.php?amount=20');
   fetch(myRequest)
     .then(response => response.json())
     .then(data => {
