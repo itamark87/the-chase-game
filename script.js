@@ -1,6 +1,5 @@
 'use strict';
 
-
 // Selecting elements
 const questionTxt = document.querySelector('.question-txt');
 const questionHeader = document.querySelector('.question-num');
@@ -73,9 +72,7 @@ function cutAnswers() {
       incorrectIdx.push(i);
     }
   }
-  console.log(incorrectIdx);
   shuffleAnswers(incorrectIdx);
-  console.log(incorrectIdx);
   buttons[incorrectIdx[0]].style.display = 'none';
   buttons[incorrectIdx[1]].style.display = 'none';
   fifty -= 1;
@@ -209,7 +206,6 @@ function setNewQuestion(question, turn) {
   answers.push(question.correct_answer);
   shuffleAnswers(answers);
   correctAnswer = answers.indexOf(question.correct_answer);
-  console.log(correctAnswer + 1);
   questionHeader.textContent = 'Question #' + turn;
   questionTxt.textContent = htmlDecode(question.question);
   setAnswers(answers);
@@ -256,7 +252,6 @@ function loadQuestions() {
     .then(response => response.json())
     .then(data => {
       questions = [...data.results];
-      console.log(data);
       enableBtns();
     });
 }
@@ -289,4 +284,3 @@ function resetGame() {
 }
 
 resetGame();
-
