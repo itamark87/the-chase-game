@@ -93,15 +93,15 @@ function cutAnswers() {
 // Styles modal and layout with win if escaped or with red screen if caught
 function finishGame() {
   if (score > 250) {
+    herman.src = 'sad.jpg';
     confetti.classList.remove('hidden');
     modalHeader.textContent = 'YOU ESCAPED FROM THE CHASER! 🎉';
     modal.style.backgroundImage = colors.win;
-    herman.src = 'sad.jpg';
   } else {
+    herman.src = 'happy.jpg';
     confetti.classList.add('hidden');
     modalHeader.textContent = 'YOU WERE CAUGHT BY THE CHASER ☠';
     modal.style.backgroundImage = colors.defeat;
-    herman.src = 'happy.jpg';
   }
   resetGame();
 }
